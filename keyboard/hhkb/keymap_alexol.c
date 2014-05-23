@@ -19,14 +19,14 @@ const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS] PROGMEM = {
      * |-----------------------------------------------------------|
      * |Shift   |  Z|  X|  C|  V|  B|  N|  M|  ,|  .| Fn2|Shift |Fn0|
      * `-----------------------------------------------------------'
-     *       |Gui|Alt  |         Space         |LAlt  |GUI|
+     *       |Alt|Gui  |         Space         |GUI   |LAlt|
      *       `-----------------------------------------------'
      */
     KEYMAP(ESC, 1,   2,   3,   4,   5,   6,   7,   8,   9,   0,   MINS,EQL, BSLS,GRV,   \
            FN4, Q,   W,   E,   R,   T,   Y,   U,   I,   O,   P,   LBRC,RBRC,BSPC,       \
            LCTL,A,   S,   D,   F,   G,   H,   J,   K,   L,   FN3,QUOT,FN1,             \
            LSFT,Z,   X,   C,   V,   B,   N,   M,   COMM,DOT, FN2,RSFT,FN0,             \
-                LGUI,LALT,          SPC,                LALT,RGUI),
+                LALT,LGUI,          SPC,                RGUI,LALT),
 
     /* Layer 1: HHKB mode (HHKB Fn)
      * ,-----------------------------------------------------------.
