@@ -27,7 +27,7 @@
 # make flip-ee = Download the eeprom file to the device, using Atmel FLIP
 #                (must have Atmel FLIP installed).
 #
-# make debug = Start either simulavr or avarice as specified for debugging, 
+# make debug = Start either simulavr or avarice as specified for debugging,
 #              with avr-gdb or avr-insight as the front end for debugging.
 #
 # make filename.s = Just compile filename.c into the assembler code only.
@@ -42,6 +42,7 @@
 TARGET = hhkb_lufa
 
 # Directory common source filess exist
+TOP_DIR = ../..
 TMK_DIR = ../../tmk_core
 
 # Directory keyboard dependent files exist
@@ -49,7 +50,8 @@ TARGET_DIR = .
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC +=	keymap_common.c \
+#SRC +=	keymap_common.c
+SRC +=	hhkb.c \
 	matrix.c \
 	led.c
 
@@ -105,7 +107,8 @@ F_USB = $(F_CPU)
 #   Atmel DFU loader 4096	(TMK Alt Controller)
 #   LUFA bootloader  4096
 #   USBaspLoader     2048
-OPT_DEFS += -DBOOTLOADER_SIZE=4096
+#OPT_DEFS += -DBOOTLOADER_SIZE=4096
+OPT_DEFS += -DBOOTLOADER_SIZE=512
 
 
 # Build Options
@@ -115,7 +118,7 @@ BOOTMAGIC_ENABLE = yes		# Virtual DIP switch configuration
 MOUSEKEY_ENABLE = yes		# Mouse keys
 EXTRAKEY_ENABLE = yes		# Audio control and System control
 CONSOLE_ENABLE = yes		# Console for debug
-COMMAND_ENABLE = yes    	# Commands for debug and configuration
+COMMAND_ENABLE = yes		# Commands for debug and configuration
 NKRO_ENABLE = yes		# USB Nkey Rollover
 #KEYMAP_SECTION_ENABLE = yes	# fixed address keymap for keymap editor
 #HHKB_JP = yes			# HHKB JP support
@@ -132,9 +135,9 @@ ifdef KEYMAP
     SRC := keymap_$(KEYMAP).c $(SRC)
 else
     ifdef HHKB_JP
-    	SRC := keymap_jp.c $(SRC)
-    else 
-    	SRC := keymap_hhkb.c $(SRC)
+	SRC := keymap_jp.c $(SRC)
+    else
+	SRC := keymap_hhkb.c $(SRC)
     endif
 endif
 
@@ -147,10 +150,12 @@ endif
 # Search Path
 VPATH += $(TARGET_DIR)
 VPATH += $(TMK_DIR)
+VPATH += $(TOP_DIR)
 
 include $(TMK_DIR)/protocol/lufa.mk
-include $(TMK_DIR)/common.mk
-include $(TMK_DIR)/rules.mk
+# include $(TMK_DIR)/common.mk
+# include $(TMK_DIR)/rules.mk
+include $(TOP_DIR)/quantum/quantum.mk
 
 debug-on: EXTRAFLAGS += -DDEBUG -DDEBUG_ACTION
 debug-on: all
