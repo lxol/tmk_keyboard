@@ -14,15 +14,15 @@ const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS] __attribute__ ((section (".key
 const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS] PROGMEM = {
 #endif
     /* Layer 0: Default Layer
-     |--------+---+---+---+---+---+---+---+---+---+-----+-------+----------+-------+---|
-     | Esc    | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0   | -     | =        | \     | ` |
-     |--------+---+---+---+---+---+---+---+---+---+-----+-------+----------+-------+---|
-     | Tab    | Q | W | E | R | T | Y | U | I | O | P   | [     | ]        | Backs |   |
-     |--------+---+---+---+---+---+---+---+---+---+-----+-------+----------+-------+---|
-     | Contro | A | S | D | F | G | H | J | K | L | ;   | '     | RCtl/Ent |       |   |
-     |--------+---+---+---+---+---+---+---+---+---+-----+-------+----------+-------+---|
-     | Shift  | Z | X | C | V | B | N | M | , | . | Fn2 | Shift | Fn0      |       |   |
-     |--------+---+---+---+---+---+---+---+---+---+-----+-------+----------+-------+---|
+     |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
+     | Esc     | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0   | -       | =        | \     | ` |
+     |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
+     | Tab     | Q | W | E | R | T | Y | U | I | O | P   | [       | ]        | Backs |   |
+     |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
+     | Contro  | A | S | D | F | G | H | J | K | L | ;   | '       | RCtl/Ent |       |   |
+     |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
+     | Shift/( | Z | X | C | V | B | N | M | , | . | Fn2 | Shift/) | Fn0      |       |   |
+     |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
 
                  |-----+-----+-------+------+-----|
                  | Gui | Alt | Space | RGUI | Alt |
@@ -31,7 +31,7 @@ const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS] PROGMEM = {
     [BASE] = KEYMAP(ESC, 1,   2,   3,   4,   5,   6,   7,   8,   9,   0,   MINS,EQL, BSLS,GRV,   \
            TAB, Q,   W,   E,   R,   T,   Y,   U,   I,   O,   P,   LBRC,RBRC,BSPC,       \
            LCTL, A,   S,   D,  F,  G,  H,  J,  K,  L,   SCLN,FN3,FN1,             \
-           LSFT,Z,   X,   C,   V,   B,   N,   M,   COMM,DOT, FN2,RSFT,FN0,             \
+           FN4, Z,   X,   C,   V,   B,   N,   M,   COMM,DOT, FN2,FN5,FN0,             \
                 LALT,RGUI,          SPC,                RGUI,RALT),
 
     /* Layer 1: HHKB mode (HHKB Fn)
@@ -103,6 +103,11 @@ const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS] PROGMEM = {
 
 };
 
+/* id for user defined functions */
+enum function_id {
+    LSHIFT_LPAREN,
+    RSHIFT_RPAREN,
+};
 
 
 /*
@@ -117,9 +122,80 @@ const uint16_t fn_actions[] PROGMEM = {
     [1] = ACTION_MODS_TAP_KEY(MOD_RCTL, KC_ENT),      // RControl with tap Enter*
     [2] = ACTION_LAYER_TAP_KEY(VI, KC_SLASH),          // Cursor layer with Slash*
     [3] = ACTION_LAYER_TAP_KEY(MOUSE, KC_QUOT),           // Mousekey layer with QUOT*
-    /* [4] = ACTION_MODS_TAP_KEY(MOD_RGUI, KC_L),      // RGUI with tap J* */
-    /* [5] = ACTION_MODS_TAP_KEY(MOD_LGUI, KC_S),      // RGUI with tap F* */
-    /* [6] = ACTION_MODS_TAP_KEY(MOD_LALT, KC_A),      // RGUI with tap D* */
-    /* [7] = ACTION_MODS_TAP_KEY(MOD_RALT, KC_SCLN),      // RGUI with tap K* */
+    [4] = ACTION_FUNCTION_TAP(LSHIFT_LPAREN),           // Function: LShift with tap '('
+    [5] = ACTION_FUNCTION_TAP(RSHIFT_RPAREN),           // Function: RShift with tap ')'
+    /* [x] = ACTION_MODS_TAP_KEY(MOD_RGUI, KC_L),      // RGUI with tap J* */
+    /* [x] = ACTION_MODS_TAP_KEY(MOD_LGUI, KC_S),      // RGUI with tap F* */
+    /* [x] = ACTION_MODS_TAP_KEY(MOD_LALT, KC_A),      // RGUI with tap D* */
+    /* [x] = ACTION_MODS_TAP_KEY(MOD_RALT, KC_SCLN),      // RGUI with tap K* */
 
 };
+
+
+/*
+ * user defined action function
+ */
+void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
+{
+    if (record->event.pressed) dprint("P"); else dprint("R");
+    dprintf("%d", record->tap.count);
+    if (record->tap.interrupted) dprint("i");
+    dprint("\n");
+
+    switch (id) {
+    case LSHIFT_LPAREN:
+      // Shift parentheses example: LShft + tap '('
+      // http://stevelosh.com/blog/2012/10/a-modern-space-cadet/#shift-parentheses
+      // http://geekhack.org/index.php?topic=41989.msg1304899#msg1304899
+      if (record->event.pressed) {
+        if (record->tap.count > 0 && !record->tap.interrupted) {
+          if (record->tap.interrupted) {
+            dprint("tap interrupted\n");
+            register_mods(MOD_BIT(KC_LSHIFT));
+          }
+        } else {
+          register_mods(MOD_BIT(KC_LSHIFT));
+        }
+      } else {
+        if (record->tap.count > 0 && !(record->tap.interrupted)) {
+          add_weak_mods(MOD_BIT(KC_LSHIFT));
+          send_keyboard_report();
+          register_code(KC_9);
+          unregister_code(KC_9);
+          del_weak_mods(MOD_BIT(KC_LSHIFT));
+          send_keyboard_report();
+          record->tap.count = 0;  // ad hoc: cancel tap
+        } else {
+          unregister_mods(MOD_BIT(KC_LSHIFT));
+        }
+      }
+      break;
+    case RSHIFT_RPAREN:
+      // Shift parentheses example: LShft + tap '('
+      // http://stevelosh.com/blog/2012/10/a-modern-space-cadet/#shift-parentheses
+      // http://geekhack.org/index.php?topic=41989.msg1304899#msg1304899
+      if (record->event.pressed) {
+        if (record->tap.count > 0 && !record->tap.interrupted) {
+          if (record->tap.interrupted) {
+            dprint("tap interrupted\n");
+            register_mods(MOD_BIT(KC_RSHIFT));
+          }
+        } else {
+          register_mods(MOD_BIT(KC_RSHIFT));
+        }
+      } else {
+        if (record->tap.count > 0 && !(record->tap.interrupted)) {
+          add_weak_mods(MOD_BIT(KC_RSHIFT));
+          send_keyboard_report();
+          register_code(KC_0);
+          unregister_code(KC_0);
+          del_weak_mods(MOD_BIT(KC_RSHIFT));
+          send_keyboard_report();
+          record->tap.count = 0;  // ad hoc: cancel tap
+        } else {
+          unregister_mods(MOD_BIT(KC_RSHIFT));
+        }
+      }
+      break;
+    }
+}
