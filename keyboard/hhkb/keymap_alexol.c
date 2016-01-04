@@ -7,6 +7,7 @@
 #define HHKB 1
 #define VI 2
 #define MOUSE 3
+#define CITRIX 4
 
 #ifdef KEYMAP_SECTION_ENABLE
 const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS] __attribute__ ((section (".keymap.keymaps"))) = {
@@ -24,15 +25,15 @@ const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS] PROGMEM = {
      | Shift/( | Z | X | C | V | B | N | M | , | . | Fn2 | Shift/) | Fn0      |       |   |
      |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
 
-                 |-----+-----+-------+------+-----|
-                 | Gui | Alt | Space | RGUI | Alt |
-                 |-----+-----+-------+------+-----|
+                 |------+------+-------+------+------|
+                 | LAlt | LGUI | Space | RGUI | RAlt |
+                 |------+------+-------+------+------|
     */
     [BASE] = KEYMAP(ESC, 1,   2,   3,   4,   5,   6,   7,   8,   9,   0,   MINS,EQL, BSLS,GRV,   \
            TAB, Q,   W,   E,   R,   T,   Y,   U,   I,   O,   P,   LBRC,RBRC,BSPC,       \
            LCTL, A,   S,   D,  F,  G,  H,  J,  K,  L,   SCLN,FN3,FN1,             \
            FN4, Z,   X,   C,   V,   B,   N,   M,   COMM,DOT, FN2,FN5,FN0,             \
-                LALT,RGUI,          SPC,                RGUI,RALT),
+                LALT,LGUI,          SPC,                RGUI,RALT),
 
     /* Layer 1: HHKB mode (HHKB Fn)
       |------+-----+-----+-----+----+----+----+----+-----+-----+-----+-----+-------+-------+-----|
@@ -100,6 +101,27 @@ const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS] PROGMEM = {
            LCTL,NO,  ACL0,ACL1,ACL2,NO,  MS_L,MS_D,MS_U,MS_R,TRNS,QUOT,ENT, \
            LSFT,NO,  NO,  NO,  NO,  BTN3,BTN2,BTN1,BTN4,BTN5,SLSH,RSFT,NO, \
                 LGUI,LALT,          BTN1,               RALT,TRNS),
+    /* Layer 4: Citrix layer (Remote citrix connection with Alt as LGUI and Win as RGUI)
+     |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
+     | Esc     | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0   | -       | =        | \     | ` |
+     |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
+     | Tab     | Q | W | E | R | T | Y | U | I | O | P   | [       | ]        | Backs |   |
+     |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
+     | Contro  | A | S | D | F | G | H | J | K | L | ;   | '       | RCtl/Ent |       |   |
+     |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
+     | Shift/( | Z | X | C | V | B | N | M | , | . | Fn2 | Shift/) | Fn0      |       |   |
+     |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
+
+                 |------+------+-------+------+------|
+                 | RGUI | LGUI | Space | LGUI | RAlt |
+                 |------+------+-------+------+------|
+    */
+    [CITRIX] = KEYMAP(ESC, 1,   2,   3,   4,   5,   6,   7,   8,   9,   0,   MINS,EQL, BSLS,GRV,   \
+           TAB, Q,   W,   E,   R,   T,   Y,   U,   I,   O,   P,   LBRC,RBRC,BSPC,       \
+           LCTL, A,   S,   D,  F,  G,  H,  J,  K,  L,   SCLN,FN3,FN1,             \
+           FN4, Z,   X,   C,   V,   B,   N,   M,   COMM,DOT, FN2,FN5,FN0,             \
+                RGUI,LGUI,          SPC,                LGUI, RALT),
+
 
 };
 
