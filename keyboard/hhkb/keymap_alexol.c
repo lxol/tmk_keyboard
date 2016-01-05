@@ -8,6 +8,7 @@
 #define VI 2
 #define MOUSE 3
 #define CITRIX 4
+#define WIN 5
 
 #ifdef KEYMAP_SECTION_ENABLE
 const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS] __attribute__ ((section (".keymap.keymaps"))) = {
@@ -119,9 +120,30 @@ const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS] PROGMEM = {
     [CITRIX] = KEYMAP(ESC, 1,   2,   3,   4,   5,   6,   7,   8,   9,   0,   MINS,EQL, BSLS,GRV,   \
            TAB, Q,   W,   E,   R,   T,   Y,   U,   I,   O,   P,   LBRC,RBRC,BSPC,       \
            LCTL, A,   S,   D,  F,  G,  H,  J,  K,  L,   SCLN,FN3,FN1,             \
-           FN4, Z,   X,   C,   V,   B,   N,   M,   COMM,DOT, FN2,FN5,FN0,             \
+           FN4, Z,   X,   C,   V,   B,   N,   M,   COMM,DOT, FN6,FN5,FN0,             \
                 RGUI,LGUI,          SPC,                LGUI, RALT),
 
+
+    /* Layer 5: Layer for Win7 +
+     |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
+     | Esc     | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0   | -       | =        | \     | ` |
+     |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
+     | Tab     | Q | W | E | R | T | Y | U | I | O | P   | [       | ]        | Backs |   |
+     |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
+     | Contro  | A | S | D | F | G | H | J | K | L | ;   | '       | RCtl/Ent |       |   |
+     |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
+     | Shift/( | Z | X | C | V | B | N | M | , | . | Fn2 | Shift/) | Fn0      |       |   |
+     |---------+---+---+---+---+---+---+---+---+---+-----+---------+----------+-------+---|
+
+                 |------+------+-------+------+------|
+                 | RGui | LAlt | Space | LAlt | RGui |
+                 |------+------+-------+------+------|
+    */
+    [WIN] = KEYMAP(ESC, 1,   2,   3,   4,   5,   6,   7,   8,   9,   0,   MINS,EQL, BSLS,GRV,   \
+           TAB, Q,   W,   E,   R,   T,   Y,   U,   I,   O,   P,   LBRC,RBRC,BSPC,       \
+           LCTL, A,   S,   D,  F,  G,  H,  J,  K,  L,   SCLN,FN3,FN1,             \
+           FN4, Z,   X,   C,   V,   B,   N,   M,   COMM,DOT, FN2,FN5,FN0,             \
+                LGUI,LALT,          SPC,                LALT,RGUI),
 
 };
 
@@ -146,6 +168,7 @@ const uint16_t fn_actions[] PROGMEM = {
     [3] = ACTION_LAYER_TAP_KEY(MOUSE, KC_QUOT),           // Mousekey layer with QUOT*
     [4] = ACTION_FUNCTION_TAP(LSHIFT_LPAREN),           // Function: LShift with tap '('
     [5] = ACTION_FUNCTION_TAP(RSHIFT_RPAREN),           // Function: RShift with tap ')'
+    [6] = ACTION_LAYER_TAP_KEY(VI, KC_SLASH),          // Cursor layer with Slash*
     /* [x] = ACTION_MODS_TAP_KEY(MOD_RGUI, KC_L),      // RGUI with tap J* */
     /* [x] = ACTION_MODS_TAP_KEY(MOD_LGUI, KC_S),      // RGUI with tap F* */
     /* [x] = ACTION_MODS_TAP_KEY(MOD_LALT, KC_A),      // RGUI with tap D* */
