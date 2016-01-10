@@ -2,7 +2,8 @@
  * HHKB Layout
  */
 #include "keymap_common.h"
-
+#include "timer.h"
+//#include "action_tapping.h"
 #define BASE 0
 #define HHKB 1
 #define VI 2
@@ -32,7 +33,7 @@ const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS] PROGMEM = {
     */
     [BASE] = KEYMAP(ESC, 1,   2,   3,   4,   5,   6,   7,   8,   9,   0,   MINS,EQL, BSLS,GRV,   \
            TAB, Q,   W,   E,   R,   T,   Y,   U,   I,   O,   P,   LBRC,RBRC,BSPC,       \
-           LCTL, A,   FN8,   D,  F,  G,  H,  J,  K,  FN7,   SCLN, QUOT,FN1,             \
+           LCTL, A,   S,   D,  F,  G,  H,  J,  K,  FN7,   SCLN, QUOT,FN1,             \
            FN4, Z,   X,   C,   V,   B,   N,   M,   COMM,DOT, FN2,FN5,FN0,             \
                 LALT,LGUI,          SPC,                RGUI,RALT),
 
@@ -172,6 +173,7 @@ const uint16_t fn_actions[] PROGMEM = {
     [6] = ACTION_LAYER_TAP_KEY(VI, KC_SLASH),          // Cursor layer with Slash*
     [7] = ACTION_FUNCTION_TAP(L_MOD),           //
     [8] = ACTION_MODS_TAP_KEY(MOD_LSFT, KC_S),
+    //[9] = ACTION_MODS_TAP_KEY(ACTION_MODS_ONESHOT(MOD_LCTL), KC_S),
     /* [x] = ACTION_MODS_TAP_KEY(MOD_RGUI, KC_L),      // RGUI with tap J* */
     /* [x] = ACTION_MODS_TAP_KEY(MOD_LGUI, KC_S),      // RGUI with tap F* */
     /* [x] = ACTION_MODS_TAP_KEY(MOD_LALT, KC_A),      // RGUI with tap D* */
@@ -189,6 +191,9 @@ bool l_sentinel = false;
  */
 void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
+    action_t action = layer_switch_get_action(record->event.key);
+    dprint("ACTION: "); debug_action(action);
+
   //debug_record(*record);
   dprintf("%04X%c(%u)", (record->event.key.row<<8 | record->event.key.col), (record->event.pressed ? 'd' : 'u'), record->event.time);
   dprintf(":%u%c", record->tap.count, (record->tap.interrupted ? '-' : ' '));
@@ -316,29 +321,31 @@ P1 - P2
     // http://stevelosh.com/blog/2012/10/a-modern-space-cadet/#shift-parentheses
     // http://geekhack.org/index.php?topic=41989.msg1304899#msg1304899
     if (record->event.pressed) {
-      if (record->tap.count > 0 && !record->tap.interrupted) {
+      if (record->tap.count > 0 && !record->tap.interrupted
+          ) {
         l_sentinel_time = record->event.time;
         register_unregister_kc(KC_L);
         dprintf("press L tap non interrupted\n");
-      } else if (record->tap.count > 0 && record->tap.interrupted){
+      } else if (record->tap.count > 0 && record->tap.interrupted
+                 ){
         l_sentinel_time = record->event.time;
         register_unregister_kc(KC_L);
         dprintf("press L tap interrupted\n");
       } else if (!record->tap.count <= 0 && !record->tap.interrupted) {
         dprintf("press L non tap non interrupted\n");
-        if (record->event.time < (l_sentinel_time + 1000)) {
+        if (TIMER_DIFF_16(record->event.time, l_sentinel_time) < 1000) {
             register_code(KC_L);
             l_sentinel = true;
         } else {
-          register_mods(MOD_BIT(KC_RSHIFT));
+          register_mods(MOD_BIT(KC_LGUI));
         }
       } else {
         dprintf("press L non tap interrupted\n");
-        if (record->event.time < (l_sentinel_time + 1000)) {
+        if (TIMER_DIFF_16(record->event.time, l_sentinel_time) < 1000) {
             register_code(KC_L);
             l_sentinel = true;
         } else {
-          register_mods(MOD_BIT(KC_RSHIFT));
+          register_mods(MOD_BIT(KC_LGUI));
         }
       }
     } else {
@@ -357,7 +364,7 @@ P1 - P2
           l_sentinel = false;
         }
         else {
-          unregister_mods(MOD_BIT(KC_RSHIFT));
+          unregister_mods(MOD_BIT(KC_LGUI));
         }
 
       } else {
@@ -367,7 +374,7 @@ P1 - P2
           l_sentinel = false;
         }
         else {
-          unregister_mods(MOD_BIT(KC_RSHIFT));
+          unregister_mods(MOD_BIT(KC_LGUI));
         }
       }
     }
