@@ -81,7 +81,7 @@ const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS] PROGMEM = {
     [VI] = KEYMAP(GRV, F1,  F2,  F3,  F4,  F5,  F6,  F7,  F8,  F9,  F10, F11, F12, INS, DEL, \
            TAB, HOME,PGDN,UP,  PGUP,END, HOME,PGDN,PGUP,END, NO,  NO,  NO,  BSPC, \
            LCTL,NO,  LEFT,DOWN,RGHT,NO,  LEFT,DOWN,UP,  RGHT,NO,  NO,  ENT, \
-           LSFT,NO,  NO,  NO,  NO,  NO,  HOME,PGDN,PGUP,END, TRNS,RSFT,NO, \
+           LSFT,NO,  FN9,  NO,  NO,  NO,  HOME,PGDN,PGUP,END, TRNS,RSFT,NO, \
                 LALT,LGUI,          SPC,                RGUI,RALT),
 
     /* Layer 3: Mouse mode (Semicolon)
@@ -177,6 +177,8 @@ const uint16_t fn_actions[] PROGMEM = {
     [6] = ACTION_LAYER_TAP_KEY(VI, KC_SLASH),          // Cursor layer with Slash*
     [7] = ACTION_FUNCTION_TAP(L_MOD),           //
     [8] = ACTION_MODS_TAP_KEY(MOD_LSFT, KC_S),
+    [9] = ACTION_MODS_KEY(MOD_LGUI, KC_X),
+
     //[9] = ACTION_MODS_TAP_KEY(ACTION_MODS_ONESHOT(MOD_LCTL), KC_S),
     /* [x] = ACTION_MODS_TAP_KEY(MOD_RGUI, KC_L),      // RGUI with tap J* */
     /* [x] = ACTION_MODS_TAP_KEY(MOD_LGUI, KC_S),      // RGUI with tap F* */
