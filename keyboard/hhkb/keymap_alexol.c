@@ -11,6 +11,10 @@
 #define CITRIX 4
 #define WIN 5
 
+static uint16_t l_sentinel_time = 0x00;
+static bool l_sentinel = false;
+
+
 #ifdef KEYMAP_SECTION_ENABLE
 const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS] __attribute__ ((section (".keymap.keymaps"))) = {
 #else
@@ -181,8 +185,6 @@ const uint16_t fn_actions[] PROGMEM = {
 
 };
 
-uint16_t l_sentinel_time = 0x00;
-bool l_sentinel = false;
 
 
 
@@ -317,30 +319,13 @@ P1 - P2
     break;
 
   case L_MOD:
-    // Shift parenotheses example: LShft + tap '('
-    // http://stevelosh.com/blog/2012/10/a-modern-space-cadet/#shift-parentheses
-    // http://geekhack.org/index.php?topic=41989.msg1304899#msg1304899
     if (record->event.pressed) {
-      if (record->tap.count > 0 && !record->tap.interrupted
-          ) {
+      if (record->tap.count > 0) {
         l_sentinel_time = record->event.time;
         register_unregister_kc(KC_L);
-        dprintf("press L tap non interrupted\n");
-      } else if (record->tap.count > 0 && record->tap.interrupted
-                 ){
-        l_sentinel_time = record->event.time;
-        register_unregister_kc(KC_L);
-        dprintf("press L tap interrupted\n");
-      } else if (!record->tap.count <= 0 && !record->tap.interrupted) {
-        dprintf("press L non tap non interrupted\n");
-        if (TIMER_DIFF_16(record->event.time, l_sentinel_time) < 1000) {
-            register_code(KC_L);
-            l_sentinel = true;
-        } else {
-          register_mods(MOD_BIT(KC_LGUI));
-        }
+        dprintf("press L tap \n");
       } else {
-        dprintf("press L non tap interrupted\n");
+        dprintf("press L non tap \n");
         if (TIMER_DIFF_16(record->event.time, l_sentinel_time) < 1000) {
             register_code(KC_L);
             l_sentinel = true;
@@ -349,26 +334,12 @@ P1 - P2
         }
       }
     } else {
-      if (record->tap.count > 0 && !record->tap.interrupted) {
+      if (record->tap.count) {
         //register_unregister_kc(KC_L);
-        dprintf("release L tap non interrupted\n");
+        dprintf("release L tap\nn");
         record->tap.count = 0;  // ad hoc: cancel tap
-      } else if (record->tap.count > 0 && record->tap.interrupted){
-        //register_unregister_kc(KC_L);
-        dprintf("release L tap interrupted\n");
-        record->tap.count = 0;  // ad hoc: cancel tap
-      } else if (!record->tap.count <= 0 && !record->tap.interrupted) {
-        dprintf("release L non tap non interrupted\n");
-        if (l_sentinel) {
-          unregister_code(KC_L);
-          l_sentinel = false;
-        }
-        else {
-          unregister_mods(MOD_BIT(KC_LGUI));
-        }
-
-      } else {
-        dprintf("release L non tap interrupted\n");
+      }  else {
+        dprintf("release L non tap \n");
         if (l_sentinel) {
           unregister_code(KC_L);
           l_sentinel = false;
