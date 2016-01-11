@@ -27,7 +27,7 @@
 # make flip-ee = Download the eeprom file to the device, using Atmel FLIP
 #                (must have Atmel FLIP installed).
 #
-# make debug = Start either simulavr or avarice as specified for debugging, 
+# make debug = Start either simulavr or avarice as specified for debugging,
 #              with avr-gdb or avr-insight as the front end for debugging.
 #
 # make filename.s = Just compile filename.c into the assembler code only.
@@ -107,7 +107,11 @@ OPT_DEFS += -DINTERRUPT_CONTROL_ENDPOINT
 #   Atmel DFU loader 4096
 #   LUFA bootloader  4096
 #   USBaspLoader     2048
-OPT_DEFS += -DBOOTLOADER_SIZE=4096
+#OPT_DEFS += -DBOOTLOADER_SIZE=4096
+
+# as per original hasu settings
+OPT_DEFS += -DBOOTLOADER_SIZE=512
+
 
 
 # Build Options
@@ -122,8 +126,8 @@ COMMAND_ENABLE = yes    # Commands for debug and configuration
 # SLEEP_LED_ENABLE = yes  # Breathing sleep LED during USB suspend
 # NKRO_ENABLE = yes		# USB Nkey Rollover - if this doesn't work, see here: https://github.com/tmk/tmk_keyboard/wiki/FAQ#nkro-doesnt-work
 # BACKLIGHT_ENABLE = yes  # Enable keyboard backlight functionality
-# MIDI_ENABLE = YES 		# MIDI controls
-# UNICODE_ENABLE = YES 		# Unicode
+# MIDI_ENABLE = YES		# MIDI controls
+# UNICODE_ENABLE = YES		# Unicode
 # BLUETOOTH_ENABLE = yes # Enable Bluetooth with the Adafruit EZ-Key HID
 
 
@@ -135,5 +139,11 @@ VPATH += $(TARGET_DIR)
 VPATH += $(TOP_DIR)
 VPATH += $(TMK_DIR)
 
-include $(TOP_DIR)/quantum/quantum.mk
+debug-on: EXTRAFLAGS += -DDEBUG -DDEBUG_ACTION
+debug-on: all
 
+debug-off: EXTRAFLAGS += -DNO_DEBUG -DNO_PRINT
+debug-off: OPT_DEFS := $(filter-out -DCONSOLE_ENABLE,$(OPT_DEFS))
+debug-off: all
+
+include $(TOP_DIR)/quantum/quantum.mk
