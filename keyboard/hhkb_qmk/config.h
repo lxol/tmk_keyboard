@@ -22,15 +22,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0xFEED
-#define PRODUCT_ID      0x6060
-#define DEVICE_VER      0x0001
-#define MANUFACTURER    You
-#define PRODUCT         hhkb_qmk
-#define DESCRIPTION     A custom keyboard
+#define PRODUCT_ID      0xCAFE
+#define DEVICE_VER      0x0104
+#define MANUFACTURER    q.m.k
+#define PRODUCT         HHKB mod
+#define DESCRIPTION     q.m.k keyboard firmware for HHKB
 
 /* key matrix size */
-#define MATRIX_ROWS 4
-#define MATRIX_COLS 12
+#define MATRIX_ROWS 8
+#define MATRIX_COLS 8
 
 // Planck PCB default pin-out
 // Change this to how you wired your keyboard
