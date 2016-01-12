@@ -113,8 +113,6 @@ OPT_DEFS += -DINTERRUPT_CONTROL_ENDPOINT
 # as per original hasu settings
 OPT_DEFS += -DBOOTLOADER_SIZE=512
 
-
-
 # Build Options
 #   comment out to disable the options.
 #
